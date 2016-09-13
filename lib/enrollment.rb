@@ -17,4 +17,9 @@ class Enrollment
        @hash[:kindergarten_participation][key] = (value*1000).floor/1000.0
      end
   end
+
+  def kindergarten_participation_in_year(year)
+    
+  end
+
 end

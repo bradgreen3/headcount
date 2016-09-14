@@ -1,7 +1,6 @@
 require 'pry'
 require 'csv'
-require 'minitest/autorun'
-require 'minitest/pride'
+require_relative 'test_helper'
 require_relative '../lib/district_repository'
 
 class DistrictRepositoryTest < Minitest::Test
@@ -18,9 +17,10 @@ class DistrictRepositoryTest < Minitest::Test
     dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv"}})
     assert_equal 2, dr.find_all_matching("Adam").length
     assert_equal 0, dr.find_all_matching("blah").length
+    assert_equal [], dr.find_all_matching("blah")
   end
 
-  def test_it_returns_nil_when_district_not_there
+  def test_it_returns_nil_when_district_not_there_in_find_by_name
     dr = DistrictRepository.new
     dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv"}})
     # enrollment = er.find_by_name("ACA 20")

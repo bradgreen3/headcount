@@ -17,7 +17,11 @@ class DistrictRepository
   end
 
   def find_by_name(name)
-    @districts[name]
+    if @districts[name.upcase]
+      @districts[name.upcase]
+    else
+      return nil
+    end
   end
 
   def find_all_matching(input)

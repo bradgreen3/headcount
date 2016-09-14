@@ -19,7 +19,8 @@ class Enrollment
   end
 
   def kindergarten_participation_in_year(year)
-    
+    find_year = @hash[:kindergarten_participation][year]
+    (find_year*1000).floor/1000.0
   end
 
 end

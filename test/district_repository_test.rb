@@ -20,5 +20,13 @@ class DistrictRepositoryTest < Minitest::Test
     assert_equal 0, dr.find_all_matching("blah").length
   end
 
+  def test_it_returns_nil_when_district_not_there
+    dr = DistrictRepository.new
+    dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv"}})
+    # enrollment = er.find_by_name("ACA 20")
+
+    assert_equal nil, dr.find_by_name("ACA 20")
+  end
+
 
 end

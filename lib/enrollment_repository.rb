@@ -10,8 +10,9 @@ class EnrollmentRepository
     contents = CSV.read filename, headers: true, header_converters: :symbol
     contents.each do |row|
       if find_by_name(row[:location]).nil?
-        @enrollments[row[:location]] = Enrollment.new({:name => row[:location]})
+        @enrollments[row[:location]] = Enrollment.new({:name => row[:location], kindergarten_participation: {}})
       end
+      @enrollments[row[:location]].kindergarten_participation[row[:timeframe].to_i] = row[:data].to_f
     end
   end
 

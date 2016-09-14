@@ -1,9 +1,11 @@
 require_relative 'district'
+require_relative 'enrollment_repository'
 require 'csv'
 
 class DistrictRepository
   def initialize
     @districts = {}
+    @enrollment_repository = EnrollmentRepository.new
   end
 
   def load_data(hash)
@@ -13,6 +15,15 @@ class DistrictRepository
       if find_by_name(row[:location]).nil?
         @districts[row[:location]] = District.new({:name => row[:location]})
       end
+    end
+    @enrollment_repository.load_data(hash)
+    associater
+  end
+
+
+  def associater
+    @districts.each do |name, instance|
+      instance.enrollment = @enrollment_repository.find_by_name(name)
     end
   end
 

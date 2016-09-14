@@ -1,3 +1,4 @@
+require_relative 'test_helper'
 require  './lib/cleaner'
 require 'pry'
 require 'csv'

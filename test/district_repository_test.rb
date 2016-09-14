@@ -23,10 +23,19 @@ class DistrictRepositoryTest < Minitest::Test
   def test_it_returns_nil_when_district_not_there_in_find_by_name
     dr = DistrictRepository.new
     dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv"}})
-    # enrollment = er.find_by_name("ACA 20")
-
+    enrollment = dr.find_by_name("ACA 20")
     assert_equal nil, dr.find_by_name("ACA 20")
   end
 
+def test_case_name
+  dr = DistrictRepository.new
+  dr.load_data({
+  :enrollment => {
+    :kindergarten => "./data/Kindergartners in full-day program.csv"
+  }
+})
+district = dr.find_by_name("ACADEMY 20")
+assert_equal 0.436 , district.enrollment.kindergarten_participation_in_year(2010)
+end
 
 end

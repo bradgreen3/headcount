@@ -13,7 +13,7 @@ class DistrictRepository
     contents = CSV.read filename, headers: true, header_converters: :symbol
     contents.each do |row|
       if find_by_name(row[:location]).nil?
-        @districts[row[:location]] = District.new({:name => row[:location]})
+        @districts[row[:location].upcase] = District.new({:name => row[:location].upcase})
       end
     end
     @enrollment_repository.load_data(hash)
@@ -38,8 +38,9 @@ class DistrictRepository
   #then return this into the load file so it does it automatically?
 
   def find_by_name(name)
-    if @districts[name.upcase]
-      @districts[name.upcase]
+    name = name.upcase
+    if @districts[name]
+      @districts[name]
     else
       return nil
     end

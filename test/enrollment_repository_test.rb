@@ -6,6 +6,7 @@ require_relative '../lib/enrollment_repository'
 class EnrollmentRepositoryTest < Minitest::Test
 
   def test_it_can_load_and_find_by_name
+
     er = EnrollmentRepository.new
     er.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv"}})
     enrollment = er.find_by_name("ACADEMY 20")
@@ -14,10 +15,18 @@ class EnrollmentRepositoryTest < Minitest::Test
   end
 
   def test_it_returns_nil_when_enrollment_not_there
+    
     er = EnrollmentRepository.new
     er.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv"}})
-    # enrollment = er.find_by_name("ACA 20")
+    enrollment = er.find_by_name("ACA 20")
 
     assert_equal nil, er.find_by_name("ACA 20")
+  end
+
+  def test_it_can_load_high_school
+    er = EnrollmentRepository.new
+    er.load_data({:enrollment => {
+    :kindergarten => "./data/Kindergartners in full-day program.csv", :high_school_graduation => "./data/High school graduation rates.csv"}})
+    enrollment = er.find_by_name("ACADEMY 20")
   end
 end

@@ -3,6 +3,8 @@ require_relative 'enrollment_repository'
 require 'csv'
 
 class DistrictRepository
+  attr_reader :districts
+  
   def initialize
     @districts = {}
     @enrollment_repository = EnrollmentRepository.new

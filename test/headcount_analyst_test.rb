@@ -58,9 +58,18 @@ class HeadcountAnalystTest < Minitest::Test
     dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv", :high_school_graduation => "./data/High school graduation rates.csv"}})
     ha = HeadcountAnalyst.new(dr)
 
-    assert_equal true, ha.kindergarten_participation_correlates_with_high_school_graduation(for: 'STATEWIDE')
+    assert_equal false, ha.kindergarten_participation_correlates_with_high_school_graduation(for: 'STATEWIDE')
   end
 
+  def test_correlation_returns_true_or_false_against_multiple_districcts
+    dr = DistrictRepository.new
+    dr.load_data({:enrollment => {:kindergarten => "./data/Kindergartners in full-day program.csv", :high_school_graduation => "./data/High school graduation rates.csv"}})
+    ha = HeadcountAnalyst.new(dr)
+
+    assert_equal false, ha.kindergarten_participation_correlates_with_high_school_graduation(
+  :across => ['ACADEMY 20', 'ADAMS COUNTY 14', 'AGATE 300', 'BENNETT 29J'])
+  end
+#
 
 
 

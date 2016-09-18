@@ -19,10 +19,9 @@ class Enrollment
     @hash[:kindergarten_participation].each do |key, value|
       @hash[:kindergarten_participation][key] = three_digiter(value)
     end
- end
+  end
 
- def kindergarten_participation_in_year(year)
-  #  binding.pry
+  def kindergarten_participation_in_year(year)
     find_year = @hash[:kindergarten_participation][year]
     three_digiter(find_year)
   end

@@ -1,13 +1,15 @@
 require_relative 'district'
 require_relative 'enrollment_repository'
+require_relative 'statewide_test_repository'
 require 'csv'
 
 class DistrictRepository
   attr_reader :districts
-  
+
   def initialize
     @districts = {}
     @enrollment_repository = EnrollmentRepository.new
+    @statewide_testing = StatewideRepository.new
   end
 
   def load_data(hash)
@@ -20,12 +22,22 @@ class DistrictRepository
     end
     @enrollment_repository.load_data(hash)
     associater
-  end
+    @statewide_testing.load_data(hash)
+    # binding.pry
+    associater_statewide
 
+  end
 
   def associater
     @districts.each do |name, instance|
       instance.enrollment = @enrollment_repository.find_by_name(name)
+    end
+  end
+
+  def associater_statewide
+    @districts.each do |name, instance|
+
+      instance.statewide_testing = @statewide_testing.find_by_name(name)
     end
   end
 

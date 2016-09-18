@@ -2,7 +2,7 @@ require_relative 'district_repository'
 
 class HeadcountAnalyst
 
-  attr_reader :enrollment, :districts
+  # attr_reader :enrollment, :districts
 
   def initialize(dr)
     @dr = dr
@@ -19,9 +19,8 @@ class HeadcountAnalyst
   def calculate_average(name)
     contents = @dr.find_by_name(name.upcase).enrollment.kindergarten
     total = 0
-    contents.each do |key, value|
-      total += value
-      end
+    contents.each {|key, value| total += value}
+    #added shortened version of each
     total = total / (contents.count)
     return total
   end

@@ -101,7 +101,7 @@ class DistrictRepositoryTest < Minitest::Test
 })
 
     district = dr.find_by_name("ACADEMY 20")
-    # binding.pry
+  
     assert_equal 0.713, district.statewide_testing.proficient_for_subject_by_race_in_year(:math, :white, 2012)
   end
 

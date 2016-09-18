@@ -1,6 +1,8 @@
 require_relative 'district'
 require_relative 'enrollment_repository'
+require_relative 'enrollment'
 require_relative 'statewide_test_repository'
+require_relative 'statewide_test'
 require 'csv'
 
 class DistrictRepository
@@ -9,10 +11,10 @@ class DistrictRepository
   def initialize
     @districts = {}
     @enrollment_repository = EnrollmentRepository.new
-    @statewide_testing = StatewideRepository.new
+    @statewide_test = StatewideTestRepository.new
   end
 
-  def load_data(hash)
+  def load_data(hash = hash, statewide_testing = nil)
     filename = hash[:enrollment][:kindergarten]
     contents = CSV.read filename, headers: true, header_converters: :symbol
     contents.each do |row|
@@ -20,12 +22,13 @@ class DistrictRepository
         @districts[row[:location].upcase] = District.new({:name => row[:location].upcase})
       end
     end
-    @enrollment_repository.load_data(hash)
+    @enrollment_repository.load_data(hash, statewide_testing = nil)
     associater
-    @statewide_testing.load_data(hash)
+    if hash[:statewide_testing]
+      @statewide_test.load_data(hash, statewide_testing = nil)
     # binding.pry
-    associater_statewide
-
+      associater_statewide
+    end
   end
 
   def associater
@@ -37,7 +40,7 @@ class DistrictRepository
   def associater_statewide
     @districts.each do |name, instance|
 
-      instance.statewide_testing = @statewide_testing.find_by_name(name)
+      instance.statewide_testing = @statewide_test.find_by_name(name)
     end
   end
 

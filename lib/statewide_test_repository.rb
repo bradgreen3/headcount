@@ -1,21 +1,24 @@
 require 'csv'
 require_relative 'statewide_test'
+require_relative 'statewide_test_repository'
 
-class StatewideRepository
+class StatewideTestRepository
 
-  attr_reader :statewide_testing
+  attr_reader :statewide_test
 
   def initialize
-    @statewide_testing = {}
+    @statewide_test = {}
   end
 
-  def load_data(hash)
-    if hash != hash.empty?
+  def load_data(hash, statewide_testing = nil)
+
+    # if hash != hash.empty?
     create_statewide_repo(hash)
-    end
+    # end
   end
 
-  def create_statewide_repo(hash)
+  def create_statewide_repo(hash, statewide_testing = nil)
+
     hash[:statewide_testing].each do |symbol, filename|
       contents = CSV.read filename, headers: true, header_converters: :symbol
       contents.each do |row|
@@ -33,7 +36,7 @@ class StatewideRepository
   end
 
   def create_statewide_instance(symbol, row)
-    @statewide_testing[row[:location].upcase] = Statewide.new({:name => row[:location].upcase,
+    @statewide_test[row[:location].upcase] = Statewide.new({:name => row[:location].upcase,
       :third_grade => {:math => {}, :reading => {}, :writing => {} },
       :eighth_grade => {:math => {}, :reading => {}, :writing => {} },
       :math => {:all_students => {}, :asian => {}, :black => {}, :pacific_islander => {}, :hispanic => {}, :native_american => {}, :two_or_more => {}, :white => {}},
@@ -62,8 +65,8 @@ class StatewideRepository
   # end
 
   def find_by_name(name)
-    if @statewide_testing[name]
-       @statewide_testing[name]
+    if @statewide_test[name]
+       @statewide_test[name]
     else
       return nil
     end

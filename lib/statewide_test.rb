@@ -9,9 +9,9 @@ SUBJECTS = [:math, :reading, :writing]
 YEARS = [2008, 2009, 2010, 2011, 2012, 2013, 2014]
 GRADES = [3,8]
 
-  def initialize(hash)
+  def initialize(hash , statewide_testing = nil)
     @hash = hash
-
+    @statewide_testing = nil
   end
 
   def name

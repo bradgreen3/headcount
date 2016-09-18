@@ -6,7 +6,7 @@ class EnrollmentRepository
     @enrollments = {}
   end
 
-  def load_data(hash)
+  def load_data(hash, statewide_testing = nil)
     hash[:enrollment].each do |symbol, filename|
       contents = CSV.read filename, headers: true, header_converters: :symbol
       contents.each do |row|

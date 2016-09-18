@@ -1,8 +1,8 @@
 require 'pry'
 require 'csv'
 require_relative 'test_helper'
-require_relative '../lib/statewide'
-require_relative '../lib/statewide_repository'
+require_relative '../lib/statewide_test'
+require_relative '../lib/statewide_test_repository'
 
 class StatewideTest < Minitest::Test
 

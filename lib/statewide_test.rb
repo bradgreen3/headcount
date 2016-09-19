@@ -111,7 +111,6 @@ GRADES = [3,8]
     if SUBJECTS.include?(subject) == false ||  YEARS.include?(year) == false || RACES.include?(race) == false
       raise UnknownDataError
     else
-
       value = @hash[subject.to_sym][race.to_sym][year.to_i]
       three_digiter(value)
     end

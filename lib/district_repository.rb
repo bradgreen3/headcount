@@ -14,7 +14,7 @@ class DistrictRepository
     @statewide_test = StatewideTestRepository.new
   end
 
-  def load_data(hash = hash, statewide_testing = nil)
+  def load_data(hash, statewide_testing = nil)
     filename = hash[:enrollment][:kindergarten]
     contents = CSV.read filename, headers: true, header_converters: :symbol
     contents.each do |row|
@@ -22,10 +22,10 @@ class DistrictRepository
         @districts[row[:location].upcase] = District.new({:name => row[:location].upcase})
       end
     end
-    @enrollment_repository.load_data(hash, statewide_testing = nil)
+    @enrollment_repository.load_data(hash)
     associater
     if hash[:statewide_testing]
-      @statewide_test.load_data(hash, statewide_testing = nil)
+      @statewide_test.load_data(hash)
     # binding.pry
       associater_statewide
     end
@@ -40,7 +40,7 @@ class DistrictRepository
   def associater_statewide
     @districts.each do |name, instance|
 
-      instance.statewide_testing = @statewide_test.find_by_name(name)
+      instance.statewide_test = @statewide_test.find_by_name(name)
     end
   end
 

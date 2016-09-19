@@ -36,7 +36,7 @@ class StatewideTestRepository
   end
 
   def create_statewide_instance(symbol, row)
-    @statewide_test[row[:location].upcase] = Statewide.new({:name => row[:location].upcase,
+    @statewide_test[row[:location].upcase] = StatewideTest.new({:name => row[:location].upcase,
       :third_grade => {:math => {}, :reading => {}, :writing => {} },
       :eighth_grade => {:math => {}, :reading => {}, :writing => {} },
       :math => {:all_students => {}, :asian => {}, :black => {}, :pacific_islander => {}, :hispanic => {}, :native_american => {}, :two_or_more => {}, :white => {}},

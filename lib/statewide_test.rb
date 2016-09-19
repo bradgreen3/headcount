@@ -1,6 +1,6 @@
 require_relative 'error'
 
-class Statewide
+class StatewideTest
   attr_reader :hash
   attr_accessor :statewide_testing
 

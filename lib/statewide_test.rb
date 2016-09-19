@@ -102,6 +102,7 @@ GRADES = [3,8]
       raise UnknownDataError
     elsif grade == 3
       @hash[:third_grade][subject.to_sym][year.to_i]
+      binding.pry
     elsif grade == 8
       @hash[:eighth_grade][subject.to_sym][year.to_i]
     end

@@ -4,10 +4,10 @@ require_relative 'test_helper'
 require_relative '../lib/statewide_test'
 require_relative '../lib/statewide_test_repository'
 
-class StatewideTest < Minitest::Test
+class StatewideTestTest < Minitest::Test
 
   def setup
-    @str = StatewideRepository.new
+    @str = StatewideTestRepository.new
     @str.load_data({:statewide_testing => {
         :third_grade => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
         :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",

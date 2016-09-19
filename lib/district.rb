@@ -13,8 +13,8 @@ class District
     @hash[:name]
   end
 
-  def statewide_test
-    @hash[:name]
-  end
+  # def statewide_test
+  #   @hash[:name]
+  # end
 
 end

@@ -101,10 +101,13 @@ GRADES = [3,8]
     if SUBJECTS.include?(subject) == false ||  YEARS.include?(year) == false || GRADES.include?(grade) == false
       raise UnknownDataError
     elsif grade == 3
-      @hash[:third_grade][subject.to_sym][year.to_i]
-      binding.pry
+      value = @hash[:third_grade][subject.to_sym][year.to_i]
     elsif grade == 8
-      @hash[:eighth_grade][subject.to_sym][year.to_i]
+      value = @hash[:eighth_grade][subject.to_sym][year.to_i]
+    end
+    if value == 0.0
+      return "N/A"
+    else value
     end
   end
 

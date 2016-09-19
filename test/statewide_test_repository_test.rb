@@ -3,10 +3,10 @@ require 'csv'
 require_relative 'test_helper'
 require_relative '../lib/statewide_test_repository'
 
-class StatewideRepositoryTest < Minitest::Test
+class StatewideTestRepositoryTest < Minitest::Test
 
   def test_it_can_find_file_by_name
-    str = StatewideRepository.new
+    str = StatewideTestRepository.new
     str.load_data({:statewide_testing => {
         :third_grade => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
         :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",

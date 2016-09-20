@@ -3,6 +3,7 @@ require_relative 'enrollment_repository'
 require_relative 'enrollment'
 require_relative 'statewide_test_repository'
 require_relative 'statewide_test'
+require_relative 'economic_profile_repository'
 require 'csv'
 
 class DistrictRepository
@@ -12,6 +13,7 @@ class DistrictRepository
     @districts = {}
     @enrollment_repository = EnrollmentRepository.new
     @statewide_test = StatewideTestRepository.new
+    @economic_profile = EconomicProfileRepository.new
   end
 
   def load_data(hash, statewide_testing = nil)
@@ -28,6 +30,10 @@ class DistrictRepository
       @statewide_test.load_data(hash)
       associater_statewide
     end
+    if hash[:economic_profile]
+      @economic_profile.load_data(hash)
+      associater_economic
+    end
   end
 
   def associater
@@ -39,6 +45,12 @@ class DistrictRepository
   def associater_statewide
     @districts.each do |name, instance|
       instance.statewide_test = @statewide_test.find_by_name(name)
+    end
+  end
+
+  def associater_economic
+    @districts.each do |name, instance|
+      instance.economic_profile = @economic_profile.find_by_name(name)
     end
   end
 

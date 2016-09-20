@@ -10,7 +10,7 @@ class StatewideTestRepository
     @statewide_test = {}
   end
 
-  def load_data(hash, statewide_testing = nil)
+  def load_data(hash)
     create_statewide_repo(hash)
   end
 

@@ -61,6 +61,16 @@ class StatewideTestTest < Minitest::Test
          2014 => {:math => 0.800, :reading => 0.855, :writing => 0.789}}),  statewide_test.proficient_by_race_or_ethnicity(:asian)
   end
 
+  def test_it_can_return_proficiency_by_race_directly
+    statewide_test = @str.find_by_name("ACADEMY 20")
+
+    assert_equal (
+        {2011 => {:math => 0.816, :reading => 0.897, :writing => 0.826},
+         2012 => {:math => 0.818, :reading => 0.893, :writing => 0.808},
+         2013 => {:math => 0.805, :reading => 0.901, :writing => 0.810},
+         2014 => {:math => 0.800, :reading => 0.855, :writing => 0.789}}),  statewide_test.proficient_by_race(:asian)
+  end
+
   def test_it_will_return_error_if_race_unknown
 
     statewide_test = @str.find_by_name("ACADEMY 20")

@@ -12,9 +12,7 @@ class StatewideTestRepositoryTest < Minitest::Test
         :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
         :math => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
         :reading => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
-        :writing => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
-      }
-    })
+        :writing => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"}})
     str = str.find_by_name("ACADEMY 20")
 
     assert_equal "ACADEMY 20", str.name

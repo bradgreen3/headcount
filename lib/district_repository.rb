@@ -26,7 +26,6 @@ class DistrictRepository
     associater
     if hash[:statewide_testing]
       @statewide_test.load_data(hash)
-    # binding.pry
       associater_statewide
     end
   end
@@ -39,7 +38,6 @@ class DistrictRepository
 
   def associater_statewide
     @districts.each do |name, instance|
-
       instance.statewide_test = @statewide_test.find_by_name(name)
     end
   end
@@ -67,7 +65,6 @@ class DistrictRepository
     @districts.select do |name, district|
       district if name.upcase.include?(input.upcase)
     end.values
-    # binding.pry
   end
 
 end

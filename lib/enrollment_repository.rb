@@ -2,6 +2,7 @@ require 'pry'
 require_relative 'enrollment'
 
 class EnrollmentRepository
+  
   def initialize
     @enrollments = {}
   end

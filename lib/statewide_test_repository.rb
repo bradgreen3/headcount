@@ -11,18 +11,14 @@ class StatewideTestRepository
   end
 
   def load_data(hash, statewide_testing = nil)
-
-    # if hash != hash.empty?
     create_statewide_repo(hash)
-    # end
   end
 
   def create_statewide_repo(hash, statewide_testing = nil)
-
     hash[:statewide_testing].each do |symbol, filename|
       contents = CSV.read filename, headers: true, header_converters: :symbol
-      contents.each do |row|
-        check_for_existing_instance(symbol, row)
+        contents.each do |row|
+          check_for_existing_instance(symbol, row)
       end
     end
   end
@@ -32,7 +28,7 @@ class StatewideTestRepository
       create_statewide_instance(symbol, row)
     end
     # find_by_name(row[:location].upcase).send(symbol.to_s,  row[2].to_i)[row[:score].downcase.to_sym] = row[:data].to_f
-    find_by_name(row[:location].upcase).send(symbol.to_s,  row[1].to_s.downcase.gsub("hawaiian/", "").tr(" ", "_").to_sym)[row[:timeframe].to_i] = row[:data].to_f
+    find_by_name(row[:location].upcase).send(symbol.to_s, row[1].to_s.downcase.gsub("hawaiian/", "").tr(" ", "_").to_sym)[row[:timeframe].to_i] = row[:data].to_f
   end
 
   def create_statewide_instance(symbol, row)
@@ -43,7 +39,6 @@ class StatewideTestRepository
       :reading => {:all_students => {}, :asian => {}, :black => {}, :pacific_islander => {}, :hispanic => {}, :native_american => {}, :two_or_more => {}, :white => {}},
       :writing => {:all_students => {}, :asian => {}, :black => {}, :pacific_islander => {}, :hispanic => {}, :native_american => {}, :two_or_more => {}, :white => {}}
       })
-
   end
         # @statewide_testing[row[:location].upcase] = Statewide.new({:name => row[:location].upcase, :third_grade => {:math => {row[:timeframe].to_i => row[:data].to_f}, :reading => {row[:timeframe].to_i => row[:data].to_f}, :writing => {row[:timeframe].to_i => row[:data].to_f}}, :eighth_grade => {}, :math => {}, :reading => {}, :writing => {}})
         # @statewide_testing[row[:location].upcase] = Statewide.new({:name => row[:location].upcase, :third_grade => {row[:timeframe].to_i =>{:math => {}, :reading => {}, :writing => {}}}, :eighth_grade => {}, :math => {}, :reading => {}, :writing => {}})

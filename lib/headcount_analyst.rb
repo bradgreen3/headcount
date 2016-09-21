@@ -1,8 +1,11 @@
 require_relative 'district_repository'
+require_relative 'error'
 
 class HeadcountAnalyst
+GRADES = [3,8]
+SUBJECTS = [:math, :reading, :writing]
 
-  # attr_reader :enrollment, :districts
+attr_reader :grade, :subject, :top
 
   def initialize(dr)
     @dr = dr
@@ -20,7 +23,6 @@ class HeadcountAnalyst
     contents = @dr.find_by_name(name.upcase).enrollment.kindergarten
     total = 0
     contents.each {|key, value| total += value}
-    #added shortened version of each
     total = total / (contents.count)
     return total
   end
@@ -85,7 +87,6 @@ class HeadcountAnalyst
 
   def find_multi_correlations(name)
     all = []
-      # binding.pry
     name.each do |name|
       all << kindergarten_participation_against_high_school_graduation(name)
       all
@@ -118,11 +119,92 @@ class HeadcountAnalyst
     end
   end
 
-    #name = statewide here, cannot do this method on statewide
+  def top_statewide_test_year_over_year_growth(hashes)
+    @subject = hashes[:subject]
+    @grade = hashes[:grade]
+    @top = hashes[:top]
+    check_for_error(hashes)
+    return_data_by_grade
+  end
 
+  def return_data_by_grade
+    if @grade == 3
+      grade = :third_grade
+    elsif @grade == 8
+      grade = :eighth_grade
+    end
+    all = {}
+    @dr.districts.each do |key, value|
+      all[key] = @dr.find_by_name(key).statewide_test.hash[grade]
+      all
+    end
+    if @subject == nil
+      across_all_subjects(all)
+    else
+      year_over_year_growth(all)
+    end
+  end
 
+  def year_over_year_growth(all)
+    if @top
+      year_over_year_growth_multiple(all)
+    else
+    leader = 0
+    winner = all.max_by do |key,value|
+      leader =  all[key][@subject][2014] - all[key][@subject][2008] / (2014 - 2008)
+    end
+    final = [winner[0], leader]
+    end
+  end
 
+  def year_over_year_growth_multiple(all)
+    winners = all.sort_by do |key, value|
+      all[key][@subject][2014] - all[key][@subject][2008] / (2014 - 2008)
+    end.reverse
+    blah = []
+    winners = winners[0..(@top-1)]
+    winners.map do |winner|
+      blah << winner[0]
+    end
+    leaders = []
+    truncated = []
+    winners.each do |key, value|
+      leaders << all[key][@subject][2014] - all[key][@subject][2008] / (2014 - 2008)
+    leaders.map do |num|
+      truncated << num.round(3)
+      end
+    end
+    blah.zip(truncated)
+  end
 
+  def check_for_error(hashes)
+    if grade == nil
+      raise InsufficientInformationError
+    elsif GRADES.include?(@grade) == false
+      raise UnknownDataError
+    end
+  end
 
+  def across_all_subjects(all)
+    m_leader = {}
+    winner = all.each do |key,value|
+      m_leader[key] = (all[key][:math][2014] - all[key][:math][2008] / (2014 - 2008))
+    end
+    m_leader.sort_by(&:last).reverse
+    w_leader = {}
+    winner = all.max_by do |key,value|
+      w_leader[key] = all[key][:writing][2014] - all[key][:writing][2008] / (2014 - 2008)
+    end
+    w_leader.sort_by(&:last).reverse
+    r_leader = {}
+    winner = all.max_by do |key,value|
+      r_leader[key] = all[key][:reading][2014] - all[key][:reading][2008] / (2014 - 2008)
+    end
+    r_leader.sort_by(&:last).reverse
+    w_m_combined = w_leader.merge(m_leader){|key, oldval, newval| newval + oldval}
+    all_combined_and_divided = w_m_combined.merge(r_leader){|key, oldval, newval| (newval + oldval) / 3}
+    sorted = all_combined_and_divided.sort_by(&:last).reverse
+    sorted[0]
+  end
 
 end

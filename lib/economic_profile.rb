@@ -34,7 +34,8 @@ IYEARS = [2009, 2010, 2011, 2012, 2013, 2014, 2015]
     if YEARS.include?(year) == false
       raise UnknownDataError
     else
-    fits_within = @hash[:median_household_income].keys.find_all {|key| year >= key[0] && year <= key[1]}
+    fits_within = @hash[:median_household_income].
+      keys.find_all {|key| year >= key[0] && year <= key[1]}
     sum = 0
     @hash[:median_household_income].each do |key, value|
       if fits_within.include?(key)

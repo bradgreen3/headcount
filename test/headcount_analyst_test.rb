@@ -71,19 +71,37 @@ class HeadcountAnalystTest < Minitest::Test
   :across => ['ACADEMY 20', 'ADAMS COUNTY 14', 'AGATE 300', 'BENNETT 29J'])
   end
 
+  def test_it_raises_insufficient_info_error_without_grade
+    ha = HeadcountAnalyst.new(@dr)
+    assert_raises InsufficientInformationError  do  ha.top_statewide_test_year_over_year_growth(subject: :math)
+    end
+  end
+
   def test_it_can_return_top_statewide_test_year_over_year_growth
     ha = HeadcountAnalyst.new(@dr)
     assert_equal ["SPRINGFIELD RE-4", 0.46315] ,  ha.top_statewide_test_year_over_year_growth(grade: 3, subject: :math)
   end
 
+  def test_it_raises_unknown_data_error_with_wrong_grade
+    ha = HeadcountAnalyst.new(@dr)
+    assert_raises UnknownDataError do  ha.top_statewide_test_year_over_year_growth(grade: 9, subject: :math)
+    end
+  end
+
   def test_it_can_return_top_statewide_test_year_over_year_growth
     ha = HeadcountAnalyst.new(@dr)
-    assert_equal [["SPRINGFIELD RE-4", 0.895], ["MANCOS RE-6", 0.895], ["FOWLER R-4J", 0.845]] ,  ha.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :math)
+    assert_equal [["COLORADO", 0.003], ["ACADEMY 20", 0.003], ["ADAMS COUNTY 14", -0.004]] ,  ha.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :math)
   end
 
   def test_year_over_year_growth_across_multiple_subjects
     ha = HeadcountAnalyst.new(@dr)
-    assert_equal ["SWINK 33", 0.81353] ,  ha.top_statewide_test_year_over_year_growth(grade: 3)
+    assert_equal ["MANCOS RE-6", 0.214] ,  ha.top_statewide_test_year_over_year_growth(grade: 3)
+  end
+
+  def test_year_over_year_growth_with_weighted_subjects
+    ha = HeadcountAnalyst.new(@dr)
+    assert_equal ["OURAY R-1", 0.154] ,
+    ha.top_statewide_test_year_over_year_growth(grade: 8, :weighting => {:math => 0.5, :reading => 0.5, :writing => 0.0})
   end
 
 

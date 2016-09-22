@@ -27,13 +27,18 @@ class EconomicProfileRepository
       create_statewide_economic_instance(symbol, row)
     end
     if symbol == :median_household_income
-      find_by_name(row[:location].upcase).send(symbol.to_s)[row[:timeframe].split("-").map(&:to_i)] = row[:data].to_f
+      find_by_name(row[:location].upcase).
+        send(symbol.to_s)[row[:timeframe].
+        split("-").map(&:to_i)] = row[:data].to_f
     end
     if symbol == :children_in_poverty && row[:dataformat] == "Percent"
-      find_by_name(row[:location].upcase).send(symbol.to_s)[row[:timeframe].to_i] = row[:data].to_f
+      find_by_name(row[:location].upcase).
+        send(symbol.to_s)[row[:timeframe].to_i] = row[:data].to_f
     end
-    if symbol == :free_or_reduced_price_lunch && row[:poverty_level] == "Eligible for Free or Reduced Lunch"
-      a = find_by_name(row[:location].upcase).send(symbol.to_s)[row[:timeframe].to_i] ||= {}
+    if symbol == :free_or_reduced_price_lunch &&
+        row[:poverty_level] == "Eligible for Free or Reduced Lunch"
+      a = find_by_name(row[:location].upcase).
+        send(symbol.to_s)[row[:timeframe].to_i] ||= {}
       if row[:dataformat] == "Percent"
         a[:percentage] = row[:data].to_f
       elsif row[:dataformat] == "Number"
@@ -41,7 +46,8 @@ class EconomicProfileRepository
         end
       end
     if symbol == :title_i
-      find_by_name(row[:location].upcase).send(symbol.to_s)[row[:timeframe].to_i] = row[:data].to_f
+      find_by_name(row[:location].upcase).
+        send(symbol.to_s)[row[:timeframe].to_i] = row[:data].to_f
     end
 
   end

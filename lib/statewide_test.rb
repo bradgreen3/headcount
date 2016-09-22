@@ -4,7 +4,9 @@ class StatewideTest
   attr_reader :hash
   attr_accessor :statewide_testing
 
-RACES = [:all_students, :asian, :black, :pacific_islander, :hispanic, :native_american, :two_or_more, :white]
+RACES = [:all_students, :asian, :black,
+        :pacific_islander, :hispanic,
+        :native_american, :two_or_more, :white]
 SUBJECTS = [:math, :reading, :writing]
 YEARS = [2008, 2009, 2010, 2011, 2012, 2013, 2014]
 GRADES = [3,8]
@@ -97,7 +99,9 @@ GRADES = [3,8]
   end
 
   def proficient_for_subject_by_grade_in_year(subject, grade, year)
-    if SUBJECTS.include?(subject) == false ||  YEARS.include?(year) == false || GRADES.include?(grade) == false
+    if SUBJECTS.include?(subject) == false ||
+      YEARS.include?(year) == false ||
+      GRADES.include?(grade) == false
       raise UnknownDataError
     elsif grade == 3
       value = @hash[:third_grade][subject.to_sym][year.to_i]
@@ -111,7 +115,9 @@ GRADES = [3,8]
   end
 
   def proficient_for_subject_by_race_in_year(subject, race, year)
-    if SUBJECTS.include?(subject) == false ||  YEARS.include?(year) == false || RACES.include?(race) == false
+    if SUBJECTS.include?(subject) == false ||
+      YEARS.include?(year) == false ||
+      RACES.include?(race) == false
       raise UnknownDataError
     else
       value = @hash[subject.to_sym][race.to_sym][year.to_i]

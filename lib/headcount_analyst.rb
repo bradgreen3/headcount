@@ -97,7 +97,6 @@ attr_reader :grade, :subject, :top
     end
   end
 
-
   def statewide_correlation
     all = []
     @dr.districts.keys.each do |key|
@@ -132,35 +131,46 @@ attr_reader :grade, :subject, :top
       all[key] = @dr.find_by_name(key).statewide_test.hash[grade]
       all
     end
-    all.map do |name,data|
-      data[:math].map do |year, num|
-        if num == 0.0
-          data[:math].delete(year)
-        end
-      end
-      data[:writing].map do |year, num|
-        if num == 0.0
-          data[:writing].delete(year)
-        end
-      end
-      data[:reading].map do |year, num|
-        if num == 0.0
-          data[:reading].delete(year)
-        end
-      end
-    end
-    # all = all.each do |name, data|
-    #   data.map do |subject, stats|
-    #     stats.sort_by {|key| key}
-      # end
-    # end
-    # all
+    delete_zero_from_math(all)
+    delete_zero_from_writing(all)
+    delete_zero_from_reading(all)
     if @subject == nil
       across_all_subjects(all)
     else
       year_over_year_growth(all)
     end
   end
+
+  def delete_zero_from_math(all)
+    all.map do |name,data|
+      data[:math].map do |year, num|
+        if num == 0.0
+          data[:math].delete(year)
+        end
+      end
+    end
+  end
+
+  def delete_zero_from_writing(all)
+    all.map do |name,data|
+      data[:writing].map do |year, num|
+      if num == 0.0
+        data[:writing].delete(year)
+      end
+    end
+  end
+end
+
+
+  def delete_zero_from_reading(all)
+    all.map do |name, data|
+      data[:reading].map do |year, num|
+      if num == 0.0
+        data[:reading].delete(year)
+      end
+    end
+  end
+end
 
   def year_over_year_growth(all)
     if @top
@@ -176,7 +186,7 @@ attr_reader :grade, :subject, :top
     end
   end
 
-  def math_thing(data)
+  def mather(data)
     (((data[@subject].values.last) - (data[@subject].values.first))/
     ((data[@subject].keys.sort[-1]) - (data[@subject].keys.sort[0]))).round(3)
   end
@@ -184,13 +194,18 @@ attr_reader :grade, :subject, :top
   def year_over_year_growth_multiple(all)
     winners = all.map do |name, data|
       next if data[@subject] == {}
-      [name, math_thing(data)]
+      [name, mather(data)]
     end
-    blah = []
+    winner_names = []
     winners = winners[0..(@top-1)]
     winners.map do |winner|
-      blah << winner[0]
+      winner_names << winner[0]
     end
+    truncated = find_truncated(winners, all)
+    winner_names.zip(truncated)
+  end
+
+  def find_truncated(winners, all)
     leaders = []
     truncated = []
     winners.each do |key, value|
@@ -201,16 +216,14 @@ attr_reader :grade, :subject, :top
       truncated << num.round(3)
       end
     end
-    blah.zip(truncated)
+    truncated
   end
 
   def check_for_error(hashes)
     if grade == nil
       raise InsufficientInformationError
-      # "A grade must be provided to answer this question"
     elsif GRADES.include?(@grade) == false
       raise UnknownDataError
-      # "#{@grade} is not a known grade."
     end
   end
 
@@ -221,39 +234,49 @@ attr_reader :grade, :subject, :top
     if @weighting
       weighting_finder(m_lead, w_lead, r_lead)
     else
-    m_lead.find_all {|key, value| r_lead.include?(key) == false}
+      find_castaway_and_remove(m_lead, w_lead, r_lead)
+      find_castaway2_and_remove(m_lead, w_lead, r_lead)
+    end
+    all_added_div = merger(m_lead, w_lead, r_lead)
+    find_answer(all_added_div)
+  end
 
-    w_lead.find_all {|key, value| m_lead.include?(key) == false}
-    # castaways = m_lead.find_all {|key, value| r_lead.include?(key) == false}.to_h
-      # m_lead.each do |key, value|
-      #   if castaways.include?(key)
-      #     m_lead.delete(key)
-      #   end
-      # end
-
-# binding.pry
-      # castaways = m_lead.find_by {|key, value| w_lead.include?(key) == false}
-      # w_lead.each do |key, value|
-      #   if castaways.include?(key)
-      #     w_lead.delete(key)
-      #   end
-      # end
-
+  def merger(m_lead, w_lead, r_lead)
     w_m = m_lead.merge!(w_lead) do |key, oldv, newv|
       oldv += newv
-    end
+      end
     all_added_div = w_m.merge!(r_lead) do |key, oldv, newv|
       oldv += newv
       end
-    sorted = all_added_div.sort_by(&:last).reverse
+    end
 
-    answer = sorted[0]
+  def find_answer(all_added_div)
+    sorted = all_added_div.sort_by(&:last).reverse.to_h
+    answer = sorted.first
     f = answer[1].round(3)
     answer[1] = f
     answer
-    end
   end
 
+  def find_castaway_and_remove(m_lead, w_lead, r_lead)
+    castaways = w_lead.find_all {|key, value|
+      r_lead.include?(key) == false}.to_h
+    m_lead.each do |key, value|
+      if castaways.include?(key)
+        m_lead.delete(key)
+        end
+      end
+    end
+
+  def find_castaway2_and_remove(m_lead, w_lead, r_lead)
+    castaways2 = m_lead.find_all {|key, value|
+      r_lead.include?(key) == false}.to_h
+    w_lead.each do |key, value|
+      if castaways2.include?(key)
+        w_lead.delete(key)
+      end
+    end
+  end
 
   def weighting_finder(m_lead, w_lead, r_lead)
     m_lead.each do |key, value|
@@ -265,6 +288,10 @@ attr_reader :grade, :subject, :top
     r_lead.each do |key, value|
       r_lead[key] = value * (@weighting[:reading])
     end
+    find_weighted_answer(m_lead, w_lead, r_lead)
+  end
+
+  def find_weighted_answer(m_lead, w_lead, r_lead)
     w_m = w_lead.merge(m_lead){|key, oldv, newv| newv + oldv}
     all_added_div = w_m.merge(r_lead){|key, oldv, newv| (newv + oldv)}
     sorted = all_added_div.sort_by(&:last).reverse
@@ -307,7 +334,8 @@ attr_reader :grade, :subject, :top
       next if value[:reading] == {}
       highest_year = value[:reading].keys.sort[-1]
       lowest_year = value[:reading].keys.sort[0]
-      r_lead[key] = ((value[:reading][highest_year] - value[:reading][lowest_year])/
+      r_lead[key] = ((value[:reading][highest_year] -
+      value[:reading][lowest_year])/
       (highest_year - lowest_year)).round(3)
       end
     r_lead = r_lead.select {|key, val| !val.nan?}

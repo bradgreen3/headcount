@@ -48,25 +48,21 @@ class HeadcountAnalystTest < Minitest::Test
 
   def test_it_can_compare_high_school_graduation_to_kindergarten_participation_rates
     ha = HeadcountAnalyst.new(@dr)
-
     assert_equal 0.641, ha.kindergarten_participation_against_high_school_graduation('ACADEMY 20')
   end
 
   def test_correlation_returns_true_or_false
     ha = HeadcountAnalyst.new(@dr)
-
     assert_equal true, ha.kindergarten_participation_correlates_with_high_school_graduation(for: 'ACADEMY 20')
   end
 
   def test_correlation_returns_true_or_false_against_state
     ha = HeadcountAnalyst.new(@dr)
-
     assert_equal false, ha.kindergarten_participation_correlates_with_high_school_graduation(for: 'STATEWIDE')
   end
 
   def test_correlation_returns_true_or_false_against_multiple_districcts
     ha = HeadcountAnalyst.new(@dr)
-
     assert_equal false, ha.kindergarten_participation_correlates_with_high_school_graduation(
   :across => ['ACADEMY 20', 'ADAMS COUNTY 14', 'AGATE 300', 'BENNETT 29J'])
   end
@@ -103,6 +99,5 @@ class HeadcountAnalystTest < Minitest::Test
     assert_equal ["OURAY R-1", 0.154] ,
     ha.top_statewide_test_year_over_year_growth(grade: 8, :weighting => {:math => 0.5, :reading => 0.5, :writing => 0.0})
   end
-
 
 end

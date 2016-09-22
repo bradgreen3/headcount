@@ -72,30 +72,24 @@ class StatewideTestTest < Minitest::Test
   end
 
   def test_it_will_return_error_if_race_unknown
-
     statewide_test = @str.find_by_name("ACADEMY 20")
-
     assert_raises (UnknownRaceError) do statewide_test.proficient_by_race_or_ethnicity(:blue)
     end
   end
 
   def test_it_can_return_proficiency_based_on_subject_and_year
     statewide_test = @str.find_by_name("ACADEMY 20")
-
     assert_equal 0.857, statewide_test.proficient_for_subject_by_grade_in_year(:math, 3, 2008)
   end
 
   def test_it_will_return_error_if_subject_unknown
     statewide_test = @str.find_by_name("ACADEMY 20")
-
     assert_raises (UnknownDataError) do statewide_test.proficient_for_subject_by_grade_in_year(:science, 3, 2008)
     end
   end
 
   def test_it_will_return_error_if_year_unknown
-
     statewide_test = @str.find_by_name("ACADEMY 20")
-
     assert_raises (UnknownDataError) do statewide_test.proficient_for_subject_by_grade_in_year(:math, 3, 2016)
     end
   end
@@ -108,31 +102,25 @@ class StatewideTestTest < Minitest::Test
 
   def test_it_can_return_proficiency_based_on_race
     statewide_test = @str.find_by_name("ACADEMY 20")
-
-   assert_equal 0.818, statewide_test.proficient_for_subject_by_race_in_year(:math, :asian, 2012)
+    assert_equal 0.818, statewide_test.proficient_for_subject_by_race_in_year(:math, :asian, 2012)
   end
 
   def test_it_will_return_error_if_subject_unknown
     statewide_test = @str.find_by_name("ACADEMY 20")
-
     assert_raises (UnknownDataError) do statewide_test.proficient_for_subject_by_race_in_year(:science, :white, 2008)
     end
   end
 
   def test_it_will_return_error_if_race_unknown
     statewide_test = @str.find_by_name("ACADEMY 20")
-
     assert_raises (UnknownDataError) do statewide_test.proficient_for_subject_by_race_in_year(:math, :blue, 2008)
     end
   end
 
   def test_it_will_return_error_if_year_unknown
     statewide_test = @str.find_by_name("ACADEMY 20")
-
     assert_raises (UnknownDataError) do statewide_test.proficient_for_subject_by_race_in_year(:math, :white, 2016)
     end
   end
-
-
 
 end

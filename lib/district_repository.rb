@@ -55,16 +55,6 @@ class DistrictRepository
     end
   end
 
-  #need method to associate enrollments and districts
-  #initialize enrollment repo above?
-
-  #   @districts.each do |name, district|
-  #     district.enrollment??  = @enrollments.find_by_name(name)
-  #   end
-  # end
-
-  #then return this into the load file so it does it automatically?
-
   def find_by_name(name)
     name = name.upcase
     if @districts[name]

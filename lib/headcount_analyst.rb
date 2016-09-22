@@ -54,7 +54,6 @@ attr_reader :grade, :subject, :top
       result += value[1]
       result
     end/contents.count
-
   end
 
   def kindergarten_participation_correlates_with_high_school_graduation(name)
@@ -222,31 +221,32 @@ attr_reader :grade, :subject, :top
     if @weighting
       weighting_finder(m_lead, w_lead, r_lead)
     else
-
     m_lead.find_all {|key, value| r_lead.include?(key) == false}
-    castaways = m_lead.find_all {|key, value| r_lead.include?(key) == false}.to_h
 
-      m_lead.each do |key, value|
-        if castaways.include?(key)
-          m_lead.delete(key)
-        end
-      end
-      binding.pry
+    w_lead.find_all {|key, value| m_lead.include?(key) == false}
+    # castaways = m_lead.find_all {|key, value| r_lead.include?(key) == false}.to_h
+      # m_lead.each do |key, value|
+      #   if castaways.include?(key)
+      #     m_lead.delete(key)
+      #   end
+      # end
+
+# binding.pry
       # castaways = m_lead.find_by {|key, value| w_lead.include?(key) == false}
-      w_lead.each do |key, value|
-        if castaways.include?(key)
-          w_lead.delete(key)
-        end
-      end
-    w_m = m_lead.merge!(w_lead) do |key, oldv, newv|
+      # w_lead.each do |key, value|
+      #   if castaways.include?(key)
+      #     w_lead.delete(key)
+      #   end
+      # end
 
+    w_m = m_lead.merge!(w_lead) do |key, oldv, newv|
+      oldv += newv
     end
     all_added_div = w_m.merge!(r_lead) do |key, oldv, newv|
-
+      oldv += newv
       end
-
-binding.pry
     sorted = all_added_div.sort_by(&:last).reverse
+
     answer = sorted[0]
     f = answer[1].round(3)
     answer[1] = f
@@ -304,14 +304,12 @@ binding.pry
   def reading_leader(all)
     r_lead = {}
     all.each do |key,value|
-
       next if value[:reading] == {}
       highest_year = value[:reading].keys.sort[-1]
       lowest_year = value[:reading].keys.sort[0]
       r_lead[key] = ((value[:reading][highest_year] - value[:reading][lowest_year])/
       (highest_year - lowest_year)).round(3)
       end
-
     r_lead = r_lead.select {|key, val| !val.nan?}
     no_nan_reading = r_lead.sort_by(&:last).reverse.to_h
   end

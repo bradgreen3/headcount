@@ -5,16 +5,10 @@ class District
 
   def initialize(hash)
     @hash = hash
-    # @enrollment = nil
-    # @statewide_test = nil
   end
 
   def name
     @hash[:name]
   end
-
-  # def statewide_test
-  #   @hash[:name]
-  # end
 
 end

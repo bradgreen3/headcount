@@ -3,7 +3,6 @@ require_relative 'statewide_test'
 require_relative 'statewide_test_repository'
 
 class StatewideTestRepository
-
   attr_reader :statewide_test
 
   def initialize
@@ -57,6 +56,5 @@ class StatewideTestRepository
       return nil
     end
   end
-
 
 end

@@ -125,6 +125,8 @@ GRADES = [3,8]
     end
   end
 
+private
+
   def new_hash_ethnicity
     setup_ethnicity_hash =
     { 2011=>{:math=>nil, :reading=>nil, :writing=>nil},
